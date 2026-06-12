@@ -1,5 +1,8 @@
+packages:
+  - '.'
 allowBuilds:
   '@firebase/util': true
   '@nestjs/core': true
   protobufjs: true
   unrs-resolver: true
+
