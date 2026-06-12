@@ -2,13 +2,13 @@ import { IsString, IsUrl, IsBoolean, IsInt, IsOptional } from 'class-validator';
 
 export class CreateSponsorDto {
   @IsString()
-  name: string;
+  name!: string;
 
   @IsUrl()
-  bannerUrl: string;
+  bannerUrl!: string;
 
   @IsUrl()
-  linkUrl: string;
+  linkUrl!: string;
 
   @IsBoolean()
   @IsOptional()

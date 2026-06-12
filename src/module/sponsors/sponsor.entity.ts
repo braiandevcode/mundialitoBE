@@ -8,23 +8,23 @@ import {
 @Entity('sponsors')
 export class Sponsor {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
-  id: string;
+  id!: string;
 
   @Column({ name: 'name' })
-  name: string;
+  name!: string;
 
   @Column({ name: 'banner_url' })
-  bannerUrl: string;
+  bannerUrl!: string;
 
   @Column({ name: 'link_url' })
-  linkUrl: string;
+  linkUrl!: string;
 
   @Column({ name: 'is_active', default: true })
-  isActive: boolean;
+  isActive!: boolean;
 
   @Column({ name: 'display_order', type: 'int', default: 0 })
-  displayOrder: number;
+  displayOrder!: number;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 }

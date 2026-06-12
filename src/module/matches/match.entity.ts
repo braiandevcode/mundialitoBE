@@ -4,52 +4,52 @@ import { Team } from '../teams/team.entity';
 @Entity('matches')
 export class Match {
   @PrimaryColumn({ name: 'id', length: 20 })
-  id: string;
+  id!: string;
 
   @Column({ name: 'group_id', type: 'varchar', length: 2, nullable: true })
-  groupId: string | null;
+  groupId!: string | null;
 
   @Column({ name: 'round', type: 'varchar', length: 10, nullable: true })
-  round: string | null;
+  round!: string | null;
 
   @Column({ name: 'match_number', type: 'int' })
-  matchNumber: number;
+  matchNumber!: number;
 
   @Column({ name: 'home_team_id', length: 5 })
-  homeTeamId: string;
+  homeTeamId!: string;
 
   @ManyToOne(() => Team)
   @JoinColumn({ name: 'home_team_id' })
-  homeTeam: Team;
+  homeTeam!: Team;
 
   @Column({ name: 'away_team_id', length: 5 })
-  awayTeamId: string;
+  awayTeamId!: string;
 
   @ManyToOne(() => Team)
   @JoinColumn({ name: 'away_team_id' })
-  awayTeam: Team;
+  awayTeam!: Team;
 
   @Column({ name: 'date', type: 'datetime' })
-  date: string;
+  date!: string;
 
   @Column({ name: 'status', length: 15, default: 'scheduled' })
-  status: string;
+  status!: string;
 
   @Column({ name: 'home_score', type: 'int', nullable: true })
-  homeScore: number | null;
+  homeScore!: number | null;
 
   @Column({ name: 'away_score', type: 'int', nullable: true })
-  awayScore: number | null;
+  awayScore!: number | null;
 
   @Column({ name: 'extra_home_score', type: 'int', nullable: true })
-  extraHomeScore: number | null;
+  extraHomeScore!: number | null;
 
   @Column({ name: 'extra_away_score', type: 'int', nullable: true })
-  extraAwayScore: number | null;
+  extraAwayScore!: number | null;
 
   @Column({ name: 'penalty_home_score', type: 'int', nullable: true })
-  penaltyHomeScore: number | null;
+  penaltyHomeScore!: number | null;
 
   @Column({ name: 'penalty_away_score', type: 'int', nullable: true })
-  penaltyAwayScore: number | null;
+  penaltyAwayScore!: number | null;
 }
