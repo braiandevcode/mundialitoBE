@@ -173,11 +173,10 @@ const GROUP_MATCH_DATES: Record<string, string[]> = {
 
 /**
  * Construye los 72 partidos de grupos (A–L, 6 partidos por grupo).
- * matchNumber 1–72.
  */
 function buildGroupMatches(): Partial<Match>[] {
   const matches: Partial<Match>[] = [];
-  let matchNumber = 1;
+  let matchNumber:number = 1;
 
   const groups = 'ABCDEFGHIJKL'.split('');
   for (const g of groups) {
@@ -186,7 +185,6 @@ function buildGroupMatches(): Partial<Match>[] {
     const dates = GROUP_MATCH_DATES[g];
     if (!dates) continue;
 
-    // Cada grupo: enfrentamientos round-robin
     const pairings = [
       [grp[0].id, grp[1].id],
       [grp[2].id, grp[3].id],
@@ -227,10 +225,6 @@ export class SeedService {
     @InjectRepository(Match) private readonly matchRepository: Repository<Match>,
   ) {}
 
-  // async onModuleInit(): Promise<void> {
-  //   await this.seed();
-  // }
-
   async seed(): Promise<void> {
     const teamCount = await this.teamRepository.count();
     const matchCount = await this.matchRepository.count();
@@ -242,39 +236,47 @@ export class SeedService {
 
     this.logger.log('Seeding database with 48 teams and 72 group matches...');
 
-    // Seed teams
-    await this.teamRepository.save(TEAMS.map((t) => {
+    // 1. Seed teams
+    const teamsToSave = TEAMS.map((t) => {
       const team = new Team();
       team.id = t.id;
       team.name = t.name;
       team.countryCode = t.countryCode;
       team.groupId = t.groupId;
       return team;
-    }));
+    });
+    await this.teamRepository.save(teamsToSave);
     this.logger.log(`Inserted ${TEAMS.length} teams`);
 
-    // Seed group matches only (KO rounds generated on demand by admin)
+    // 2. Seed matches con Chunking para evitar Heap Out of Memory
     const groupMatches = buildGroupMatches();
+    const BATCH_SIZE = 24; 
 
-    await this.matchRepository.save(groupMatches.map((m) => {
-      const match = new Match();
-      match.id = m.id!;
-      match.groupId = m.groupId ?? null;
-      match.round = m.round ?? null;
-      match.matchNumber = m.matchNumber!;
-      match.homeTeamId = m.homeTeamId!;
-      match.awayTeamId = m.awayTeamId!;
-      match.date = m.date!;
-      match.status = m.status!;
-      match.homeScore = m.homeScore ?? null;
-      match.awayScore = m.awayScore ?? null;
-      match.extraHomeScore = m.extraHomeScore ?? null;
-      match.extraAwayScore = m.extraAwayScore ?? null;
-      match.penaltyHomeScore = m.penaltyHomeScore ?? null;
-      match.penaltyAwayScore = m.penaltyAwayScore ?? null;
-      return match;
-    }));
-    this.logger.log(`Inserted ${groupMatches.length} group matches`);
+    for (let i = 0; i < groupMatches.length; i += BATCH_SIZE) {
+      const chunk = groupMatches.slice(i, i + BATCH_SIZE);
+      const matchEntities = chunk.map((m) => {
+        const match = new Match();
+        match.id = m.id!;
+        match.groupId = m.groupId ?? null;
+        match.round = m.round ?? null;
+        match.matchNumber = m.matchNumber!;
+        match.homeTeamId = m.homeTeamId!;
+        match.awayTeamId = m.awayTeamId!;
+        match.date = m.date!;
+        match.status = m.status!;
+        match.homeScore = m.homeScore ?? null;
+        match.awayScore = m.awayScore ?? null;
+        match.extraHomeScore = m.extraHomeScore ?? null;
+        match.extraAwayScore = m.extraAwayScore ?? null;
+        match.penaltyHomeScore = m.penaltyHomeScore ?? null;
+        match.penaltyAwayScore = m.penaltyAwayScore ?? null;
+        return match;
+      });
+
+      await this.matchRepository.save(matchEntities);
+      this.logger.log(`Saved batch ${i / BATCH_SIZE + 1}: ${chunk.length} matches`);
+    }
+
     this.logger.log('Seed completed successfully');
   }
 }
