@@ -1,4 +1,4 @@
-import { Module, OnModuleInit, Logger } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { CoreModule } from './core/core.module';
 import { DatabaseModule } from './core/database/database.module';
 import { HealthModule } from './core/health/health.module';
@@ -9,7 +9,6 @@ import { MatchesModule } from './module/matches/matches.module';
 import { PredictionsModule } from './module/predictions/predictions.module';
 import { RankingModule } from './module/ranking/ranking.module';
 import { SponsorsModule } from './module/sponsors/sponsors.module';
-import { SeedModule } from './core/database/seed/seed.module';
 
 @Module({
   imports: [
@@ -23,7 +22,6 @@ import { SeedModule } from './core/database/seed/seed.module';
     PredictionsModule,
     RankingModule,
     SponsorsModule,
-    SeedModule,
   ],
 })
-export class AppModule {} // OnModuleInit moved to SeedService
+export class AppModule {}
