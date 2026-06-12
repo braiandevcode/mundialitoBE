@@ -23,7 +23,7 @@ async function bootstrap() {
   app.use(helmet());
 
   app.enableCors({
-    origin: 'https://mundialito-fe.vercel.app', 
+    origin: 'https://mundialito-fe.vercel.app/', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
     allowedHeaders: 'Content-Type, Accept, Authorization',
