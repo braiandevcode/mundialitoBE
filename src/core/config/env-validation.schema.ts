@@ -57,7 +57,22 @@ export const envValidationSchema = Joi.object({
     .default(30),
 
   CORS_ORIGIN: Joi.string()
-    .uri({ scheme: ['http', 'https'] })
+    .custom((value: string, helpers) => {
+      const origins = value
+        .split(',')
+        .map((origin) => origin.trim())
+        .filter(Boolean);
+
+      for (const origin of origins) {
+        const { error } = Joi.string()
+          .uri({ scheme: ['http', 'https'] })
+          .validate(origin);
+
+        if (error) return helpers.error('string.uri');
+      }
+
+      return value;
+    })
     .default('http://localhost:5173'),
 
   ADMIN_UID: Joi.string()

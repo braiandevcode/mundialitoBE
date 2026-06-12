@@ -6,13 +6,24 @@ import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
 import { GlobalValidationPipe } from './core/pipes/validation.pipe';
 import helmet from 'helmet';
 
+function parseCorsOrigins(origin: string | undefined): string | string[] {
+  const fallbackOrigin = 'http://localhost:5173';
+  const rawOrigin = origin || fallbackOrigin;
+  const origins = rawOrigin
+    .split(',')
+    .map((value) => value.trim().replace(/\/+$/, ''))
+    .filter(Boolean);
+
+  return origins.length === 1 ? origins[0] : origins;
+}
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(helmet());
 
   app.enableCors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+    origin: parseCorsOrigins(process.env.CORS_ORIGIN),
     credentials: true,
   });
 
