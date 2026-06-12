@@ -219,19 +219,17 @@ function buildGroupMatches(): Partial<Match>[] {
 }
 
 @Injectable()
-export class SeedService implements OnModuleInit {
+export class SeedService {
   private readonly logger = new Logger(SeedService.name);
 
   constructor(
-    @InjectRepository(Team)
-    private readonly teamRepository: Repository<Team>,
-    @InjectRepository(Match)
-    private readonly matchRepository: Repository<Match>,
+    @InjectRepository(Team) private readonly teamRepository: Repository<Team>,
+    @InjectRepository(Match) private readonly matchRepository: Repository<Match>,
   ) {}
 
-  async onModuleInit(): Promise<void> {
-    await this.seed();
-  }
+  // async onModuleInit(): Promise<void> {
+  //   await this.seed();
+  // }
 
   async seed(): Promise<void> {
     const teamCount = await this.teamRepository.count();
