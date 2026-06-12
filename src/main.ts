@@ -40,6 +40,8 @@ async function bootstrap() {
   // app.setGlobalPrefix('api');
 
   const port = process.env.PORT || 3000;
-  await app.listen(port);
+  
+  await app.listen(port, '0.0.0.0'); // '0.0.0.0' necesario para que escuche fuera del contenedor
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
