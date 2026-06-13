@@ -19,14 +19,19 @@ export class FirebaseService implements OnModuleInit {
     }
 
     if (!admin.apps.length) {
-      admin.initializeApp({
-        credential: admin.credential.cert({
-          projectId,
-          clientEmail,
-          privateKey,
-        }),
-      });
-      this.logger.log('Firebase Admin SDK initialized');
+      this.logger.log('Inicializando Firebase Admin SDK...');
+      try {
+        admin.initializeApp({
+          credential: admin.credential.cert({
+            projectId,
+            clientEmail,
+            privateKey,
+          }),
+        });
+        this.logger.log('Firebase Admin SDK initialized');
+      } catch (err) {
+        this.logger.error('Error inicializando Firebase Admin SDK:', err);
+      }
     }
   }
 

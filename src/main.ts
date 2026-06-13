@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { GlobalExceptionFilter } from './core/filters/global-exception.filter';
@@ -6,8 +7,12 @@ import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
 import { GlobalValidationPipe } from './core/pipes/validation.pipe';
 import helmet from 'helmet';
 
+const logger = new Logger('Bootstrap');
+
 async function bootstrap() {
+  logger.log('Iniciando NestFactory.create(AppModule)...');
   const app = await NestFactory.create(AppModule);
+  logger.log('NestFactory.create completado');
 
   app.use(helmet());
 
@@ -31,7 +36,12 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   
-  await app.listen(port, host); // '0.0.0.0' necesario para que escuche fuera del contenedor
-  console.log(`Aplicación escuchando en ${host}:${port}`);
+  logger.log(`Intentando app.listen(${port}, ${host})...`);
+  try {
+    await app.listen(port, host);
+    logger.log(`✓ App escuchando en ${host}:${port}`);
+  } catch (err) {
+    logger.error(`✗ app.listen() lanzó error:`, err);
+  }
 }
 bootstrap();
