@@ -5,11 +5,11 @@ export default registerAs('env', () => ({
   port: parseInt(process.env.PORT || '3000', 10),
 
   db: {
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT || '3306', 10),
-    user: process.env.DB_USER || 'root',
-    pass: process.env.DB_PASS || '',
-    name: process.env.DB_NAME || 'mundialito_app',
+    host: process.env.MYSQLHOST || 'localhost',
+    port: parseInt(process.env.MYSQLPORT || '3306', 10),
+    user: process.env.MYSQLUSER || 'root',
+    pass: process.env.MYSQLPASSWORD || '',
+    name: process.env.MYSQLDATABASE || 'mundialito_app',
   },
 
   firebase: {

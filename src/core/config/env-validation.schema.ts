@@ -9,26 +9,26 @@ export const envValidationSchema = Joi.object({
     .port()
     .default(3000),
 
-  DB_HOST: Joi.string()
+  MYSQLHOST: Joi.string()
     .required()
-    .messages({ 'any.required': 'DB_HOST es requerida' }),
+    .messages({ 'any.required': 'MYSQLHOST es requerida' }),
 
-  DB_PORT: Joi.number()
+  MYSQLPORT: Joi.number()
     .port()
     .default(3306),
 
-  DB_USER: Joi.string()
+  MYSQLUSER: Joi.string()
     .required()
-    .messages({ 'any.required': 'DB_USER es requerida' }),
+    .messages({ 'any.required': 'MYSQLUSER es requerida' }),
 
-  DB_PASS: Joi.string()
+  MYSQLPASSWORD: Joi.string()
     .allow('')
     .required()
-    .messages({ 'any.required': 'DB_PASS es requerida' }),
+    .messages({ 'any.required': 'MYSQLPASSWORD es requerida' }),
 
-  DB_NAME: Joi.string()
+  MYSQLDATABASE: Joi.string()
     .required()
-    .messages({ 'any.required': 'DB_NAME es requerida' }),
+    .messages({ 'any.required': 'MYSQLDATABASE es requerida' }),
 
   FIREBASE_PROJECT_ID: Joi.string()
     .required()
