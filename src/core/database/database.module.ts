@@ -17,6 +17,8 @@ import { DatabaseConnectionLogger } from './database-logger.service';
         entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
         synchronize: configService.get<string>('env.nodeEnv') === 'development',
         logging: configService.get<string>('env.nodeEnv') === 'development',
+        retryAttempts: 2,
+        retryDelay: 1000,
         poolSize: 5,
         extra: {
           connectionLimit: 5,
