@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { DatabaseConnectionLogger } from './database-logger.service';
 
 @Module({
   imports: [
@@ -23,5 +24,6 @@ import { ConfigService } from '@nestjs/config';
       }),
     }),
   ],
+  providers: [DatabaseConnectionLogger],
 })
 export class DatabaseModule {}
