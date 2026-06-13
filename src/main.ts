@@ -24,6 +24,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(
     new ResponseTransformInterceptor(),
     new LoggingInterceptor(),
+    
   );
 
   const port = process.env.PORT || 3000;
