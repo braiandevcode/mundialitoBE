@@ -9,6 +9,15 @@ import helmet from 'helmet';
 
 const logger = new Logger('Bootstrap');
 
+process.on('uncaughtException', (err) => {
+  logger.error('UNCAUGHT EXCEPTION — proceso terminará:', err);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason) => {
+  logger.error('UNHANDLED REJECTION:', reason);
+});
+
 async function bootstrap() {
   logger.log('Iniciando NestFactory.create(AppModule)...');
   const app = await NestFactory.create(AppModule);
