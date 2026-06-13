@@ -12,7 +12,8 @@ async function bootstrap() {
   app.use(helmet());
 
   app.enableCors({
-    origin: process.env.CORS_ORIGIN, 
+    // origin: process.env.CORS_ORIGIN, (NOTA REVERTIRLO AL ENCONTRAR PROBLEMA EN ORIGEN)
+    origin:"*",
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
     allowedHeaders: 'Content-Type, Accept, Authorization',
@@ -26,6 +27,8 @@ async function bootstrap() {
   );
 
   const port = process.env.PORT || 3000;
+
+  app.setGlobalPrefix('api');
   
   await app.listen(port, '0.0.0.0'); // '0.0.0.0' necesario para que escuche fuera del contenedor
   console.log(`Application is running on: ${await app.getUrl()}`);
