@@ -27,10 +27,11 @@ async function bootstrap() {
   );
 
   const port = process.env.PORT || 3000;
+  const host = process.env.HOST || '0.0.0.0';
 
   app.setGlobalPrefix('api');
   
-  await app.listen(port, '0.0.0.0'); // '0.0.0.0' necesario para que escuche fuera del contenedor
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  await app.listen(port, host); // '0.0.0.0' necesario para que escuche fuera del contenedor
+  console.log(`Aplicación escuchando en ${host}:${port}`);
 }
 bootstrap();
