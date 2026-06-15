@@ -8,12 +8,16 @@ import { UsersModule } from '../module/users/users.module';
 import { AuthModule } from '../module/auth/auth.module';
 import { FirebaseAuthGuard } from './guards/firebase-auth.guard';
 
+const isProduction =
+  process.env.NODE_ENV === 'production' || Boolean(process.env.RAILWAY_ENVIRONMENT);
+
 @Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.local.development', '.env'],
+      ignoreEnvFile: isProduction,
+      envFilePath: isProduction ? [] : ['.env.local.development', '.env'],
       validationSchema: envValidationSchema,
       validationOptions: {
         abortEarly: false,

@@ -22,6 +22,7 @@ import { DatabaseConnectionLogger } from './database-logger.service';
         poolSize: 5,
         extra: {
           connectionLimit: 5,
+          connectTimeout: 5000,
         },
       }),
     }),

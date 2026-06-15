@@ -11,7 +11,7 @@ import type { NextFunction, Request, Response } from 'express';
 const logger = new Logger('Bootstrap');
 
 process.on('uncaughtException', (err) => {
-  logger.error('UNCAUGHT EXCEPTION — proceso terminará:', err);
+  logger.error('UNCAUGHT EXCEPTION - process will exit:', err);
   process.exit(1);
 });
 
@@ -20,9 +20,9 @@ process.on('unhandledRejection', (reason) => {
 });
 
 async function bootstrap() {
-  logger.log('Iniciando NestFactory.create(AppModule)...');
+  logger.log('Starting NestFactory.create(AppModule)...');
   const app = await NestFactory.create(AppModule);
-  logger.log('NestFactory.create completado');
+  logger.log('NestFactory.create completed');
 
   app.enableCors({
     origin: ['https://mundialito-fe.vercel.app'],
@@ -53,13 +53,18 @@ async function bootstrap() {
   const host = process.env.HOST || '0.0.0.0';
 
   app.setGlobalPrefix('api');
-  
-  logger.log(`Intentando app.listen(${port}, ${host})...`);
+
+  logger.log(`Trying app.listen(${port}, ${host})...`);
   try {
     await app.listen(port, host);
-    logger.log(`✓ App escuchando en ${host}:${port}`);
+    logger.log(`App listening on ${host}:${port}`);
   } catch (err) {
-    logger.error(`✗ app.listen() lanzó error:`, err);
+    logger.error('app.listen() failed:', err);
+    throw err;
   }
 }
-bootstrap();
+
+bootstrap().catch((err) => {
+  logger.error('Critical application bootstrap error:', err);
+  process.exit(1);
+});

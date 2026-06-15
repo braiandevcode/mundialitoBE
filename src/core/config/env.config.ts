@@ -1,7 +1,8 @@
 import { registerAs } from '@nestjs/config';
 
 export default registerAs('env', () => ({
-  nodeEnv: process.env.NODE_ENV || 'development',
+  nodeEnv:
+    process.env.NODE_ENV || (process.env.RAILWAY_ENVIRONMENT ? 'production' : 'development'),
   port: parseInt(process.env.PORT || '3000', 10),
 
   db: {
