@@ -49,15 +49,14 @@ async function bootstrap() {
     new LoggingInterceptor(),
   );
 
-  const port = process.env.PORT || 3000;
-  const host = process.env.HOST || '0.0.0.0';
+  const port = Number(process.env.PORT || 3000);
 
   app.setGlobalPrefix('api');
 
-  logger.log(`Trying app.listen(${port}, ${host})...`);
+  logger.log(`Trying app.listen(${port})...`);
   try {
-    await app.listen(port, host);
-    logger.log(`App listening on ${host}:${port}`);
+    await app.listen(port);
+    logger.log(`App listening on port ${port}`);
   } catch (err) {
     logger.error('app.listen() failed:', err);
     throw err;
