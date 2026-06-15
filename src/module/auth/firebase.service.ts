@@ -9,12 +9,12 @@ export class FirebaseService implements OnModuleInit {
   constructor(private configService: ConfigService) {}
 
   onModuleInit(): void {
-    const projectId = this.configService.getOrThrow<string>('env.firebase.projectId');
-    const clientEmail = this.configService.getOrThrow<string>('env.firebase.clientEmail');
-    const privateKey = this.configService.getOrThrow<string>('env.firebase.privateKey');
+    const projectId = this.configService.get<string>('env.firebase.projectId') || '';
+    const clientEmail = this.configService.get<string>('env.firebase.clientEmail') || '';
+    const privateKey = this.configService.get<string>('env.firebase.privateKey') || '';
 
     if (!projectId || !clientEmail || !privateKey) {
-      this.logger.warn('Firebase credentials not fully configured — Firebase Auth disabled');
+      this.logger.warn('Firebase credentials not fully configured - Firebase Auth disabled');
       return;
     }
 
@@ -33,6 +33,10 @@ export class FirebaseService implements OnModuleInit {
         this.logger.error('Error inicializando Firebase Admin SDK:', err);
       }
     }
+  }
+
+  isEnabled(): boolean {
+    return admin.apps.length > 0;
   }
 
   get auth(): admin.auth.Auth {

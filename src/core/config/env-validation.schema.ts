@@ -31,20 +31,20 @@ export const envValidationSchema = Joi.object({
     .messages({ 'any.required': 'MYSQLDATABASE es requerida' }),
 
   FIREBASE_PROJECT_ID: Joi.string()
-    .required()
-    .messages({ 'any.required': 'FIREBASE_PROJECT_ID es requerida' }),
+    .allow('')
+    .default(''),
 
   FIREBASE_CLIENT_EMAIL: Joi.string()
+    .allow('')
     .email()
-    .required()
     .messages({
-      'any.required': 'FIREBASE_CLIENT_EMAIL es requerida',
       'string.email': 'FIREBASE_CLIENT_EMAIL debe ser un email válido',
-    }),
+    })
+    .default(''),
 
   FIREBASE_PRIVATE_KEY: Joi.string()
-    .required()
-    .messages({ 'any.required': 'FIREBASE_PRIVATE_KEY es requerida' }),
+    .allow('')
+    .default(''),
 
   THROTTLE_TTL: Joi.number()
     .integer()

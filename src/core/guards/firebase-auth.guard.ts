@@ -22,6 +22,11 @@ export class FirebaseAuthGuard implements CanActivate {
   // y setea request.user con los datos del usuario para uso en controllers
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
+
+    if (!this.firebaseService.isEnabled()) {
+      throw new UnauthorizedException('Firebase auth is not configured');
+    }
+
     const authHeader = request.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
