@@ -6,6 +6,7 @@ import { ResponseTransformInterceptor } from './core/interceptors/response-trans
 import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
 import { GlobalValidationPipe } from './core/pipes/validation.pipe';
 import helmet from 'helmet';
+import type { NextFunction, Request, Response } from 'express';
 
 const logger = new Logger('Bootstrap');
 
@@ -23,14 +24,23 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   logger.log('NestFactory.create completado');
 
-  app.use(helmet());
-
   app.enableCors({
-    origin: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    origin: ['https://mundialito-fe.vercel.app'],
     credentials: true,
-    allowedHeaders: 'Content-Type, Accept, Authorization',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
+
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    if (req.method === 'OPTIONS') {
+      res.sendStatus(204);
+      return;
+    }
+
+    next();
+  });
+
+  app.use(helmet());
 
   app.useGlobalPipes(GlobalValidationPipe);
   app.useGlobalFilters(new GlobalExceptionFilter());
