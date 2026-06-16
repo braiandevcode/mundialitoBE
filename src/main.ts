@@ -57,7 +57,7 @@ async function bootstrap() {
   logger.log(`Trying app.listen(${port})...`);
   try {
     await app.listen(port, host);
-    logger.log(`App listening ${host}${port}`);
+    logger.log(`App listening ${host}:${port}`);
   } catch (err) {
     logger.error('app.listen() failed:', err);
     throw err;
