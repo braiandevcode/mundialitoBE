@@ -50,13 +50,13 @@ async function bootstrap() {
   );
 
   const port = Number(process.env.PORT || 3000);
-
+  const host = '0.0.0.0';
   app.setGlobalPrefix('api');
 
   logger.log(`Trying app.listen(${port})...`);
   try {
-    await app.listen(port);
-    logger.log(`App listening ${port}`);
+    await app.listen(port, host);
+    logger.log(`App listening ${host}:${port}`);
   } catch (err) {
     logger.error('app.listen() failed:', err);
     throw err;
