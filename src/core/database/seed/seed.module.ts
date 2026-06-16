@@ -12,7 +12,7 @@ import { SeedService } from './seed.service';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.local.development', '.env'],
+      envFilePath: ['.env.local.production', '.env'],
       validationSchema: envValidationSchema,
       validationOptions: {
         abortEarly: false,

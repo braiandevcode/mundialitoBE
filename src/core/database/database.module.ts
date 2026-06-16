@@ -18,7 +18,7 @@ import { DatabaseConnectionLogger } from './database-logger.service';
         synchronize: configService.get<string>('env.nodeEnv') === 'development',
         logging: configService.get<string>('env.nodeEnv') === 'development',
         retryAttempts: 10,
-        retryDelay: 3000, // Espera 3 segundos entre intentos
+        retryDelay: 5000, // Espera 3 segundos entre intentos
         poolSize: 5,
         extra: {
           connectionLimit: 5,

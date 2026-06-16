@@ -24,7 +24,7 @@ export default registerAs('env', () => ({
     limit: parseInt(process.env.THROTTLE_LIMIT || '30', 10),
   },
 
-  corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  corsOrigin: process.env.CORS_ORIGIN || 'https://mundialito-fe.vercel.app',
 
   adminUid: process.env.ADMIN_UID || '',
 }));
