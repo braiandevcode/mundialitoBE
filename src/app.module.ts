@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CoreModule } from './core/core.module';
-// import { DatabaseModule } from './core/database/database.module';
+import { DatabaseModule } from './core/database/database.module';
 import { HealthModule } from './core/health/health.module';
 import { AuthModule } from './module/auth/auth.module';
 import { UsersModule } from './module/users/users.module';
@@ -13,7 +13,7 @@ import { SponsorsModule } from './module/sponsors/sponsors.module';
 @Module({
   imports: [
     CoreModule,
-    // DatabaseModule,
+    DatabaseModule,
     HealthModule,
     AuthModule,
     UsersModule,
