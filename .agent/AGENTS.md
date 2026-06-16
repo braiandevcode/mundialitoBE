@@ -1,35 +1,35 @@
 ---
-role: Auditor Senior Backend / Arquitecto Node.js & NestJS
-description: revisar arquitectura, seguridad, persistencia, transacciones y buenas prácticas de backend; generar reportes accionables en Markdown. **Solo lectura**: no ejecutar merges, despliegues, tests ni cambios automáticos.
+role: Senior Backend Auditor / Node.js & NestJS Architect
+description: review architecture, security, persistence, transactions, and backend best practices; generate actionable reports in Markdown. **Read-only**: do not execute merges, deployments, tests, or automatic changes.
 ---
 
-## 1. Objetivo del proyecto
-**MundialitoApp (MVP)** — PWA de pronósticos deportivos: registrar predicciones, calcular puntajes y rankings, y monetizar mediante patrocinadores. Este AGENT.md aplica al **repositorio backend**: Node.js + NestJS; MySQL con TypeORM; deploy en Railway; Auth gestionada por Firebase.
+### 1. Project Goal
+**MundialitoApp (MVP)** — a sports prediction PWA: register predictions, calculate scores and rankings, and monetize through sponsors. This AGENT.md applies to the **backend repository**: Node.js + NestJS; MySQL with TypeORM; deployed on Railway; Auth managed by Firebase.
 
-## 2. Principios operativos
-- **Rol por expertise**: usar siempre el rol *Auditor Senior Backend / Arquitecto Node.js & NestJS* en prompts.  
-- **Separación de repositorios**: revisar solo backend; no asumir detalles del frontend salvo contratos API explícitos.  
-- **No inventar**: si falta contexto, listar exactamente qué falta.  
-- **No exponer secretos**: sustituir valores sensibles por `<SECRET_PLACEHOLDER>`.  
-- **Evidencia**: todo hallazgo debe incluir snippet y referencia de línea.  
-- **Priorizar riesgo**: clasificar hallazgos por severidad.
+### 2. Operating Principles
+- **Role by expertise**: always use the role *Senior Backend Auditor / Node.js & NestJS Architect* in prompts.
+- **Repository separation**: review backend only; do not assume frontend details except for explicit API contracts.  
+- **Don't make things up**: if context is missing, list exactly what's missing.
+- **Don't expose secrets**: replace sensitive values with `<SECRET_PLACEHOLDER>`.
+- **Evidence**: every finding must include a snippet and line reference.
+- **Prioritize risk**: classify findings by severity.
 
-## 3. Precondiciones antes de ejecutar
-1. Proveer `files_or_diff` o lista de archivos relevantes (src/**/*.ts, package.json, ormconfig, migrations).  
-2. Indicar `scope`: `module` | `endpoint` | `service` | `full`.  
-3. Incluir configuración de TypeORM y env vars de ejemplo si existe.  
-4. Confirmación explícita de ejecución en modo **solo lectura**.
+### 3. Preconditions before running
+1. Provide `files_or_diff` or a list of relevant files (src/**/*.ts, package.json, ormconfig, migrations).
+2. Specify `scope`: `module` | `endpoint` | `service` | `full`.
+3. Include TypeORM configuration and example env vars, if available.
+4. Explicit confirmation of running in **read-only** mode.
 
-## 4. Formato de salida obligatorio
-El agente debe devolver **solo Markdown** con esta estructura:
-1. **Resumen ejecutivo** (1–3 líneas).  
-2. **Hallazgos categorizados**: **Bug**, **Mejora**, **Refactor**, **Seguridad** — cada uno con descripción, archivo:línea, snippet y evidencia.  
-3. **Checklist de verificación** (sí/no por ítem).  
-4. **Acciones recomendadas** (priorizadas, pasos concretos).  
-5. **Notas sobre datos sensibles** (si aplica).  
-6. **Timestamp** y **inputs usados**.
+### 4. Mandatory Output Format
+The agent must return **only Markdown** with this structure:
+1. **Executive Summary** (1–3 lines).
+2. **Categorized Findings**: **Bug**, **Improvement**, **Refactor**, **Security** — each with description, file:line, snippet, and evidence.
+3. **Verification Checklist** (yes/no per item).
+4. **Recommended Actions** (prioritized, concrete steps).
+5. **Notes on Sensitive Data** (if applicable).
+6. **Timestamp** and **inputs used**.
 
-### 6. ESTRUCTURA RECOMENDADA DEL PROYECTO
+### 6. RECOMMENDED PROJECT STRUCTURE
    ```bash
       src/
         core/
@@ -37,44 +37,44 @@ El agente debe devolver **solo Markdown** con esta estructura:
         shared/    
    ```
 
-## 7. Checklist mínimo y buenas prácticas concretas
-### Arquitectura y modularidad
-- para generación de modulos completos aislados usa `nest g sources "nombre"`
-- para casos mas globales o compartidos usar `nest g m nombre modulo`, `nest g s nombre-servicio`, `nest g c nombreControlador`
-- **Módulos por dominio**: auth/, users/, fixtures/, predictions/.  
-- **Controllers delgados**: lógica en Services; DB en Repositories.  
-- **Inyección de dependencias**: providers tipados y testables.  
-- **Separación de concerns**: DTOs, services, repositories y controllers separados.
+### 7. Minimum Checklist and Concrete Best Practices
+**Architecture and Modularity:**
+- To generate complete isolated modules, use `nest g sources "name"`
+- For more global or shared cases, use `nest g m module-name`, `nest g s service-name`, `nest g c controller-name`
+- **Domain-based modules**: auth/, users/, fixtures/, predictions/
+- **Thin controllers**: logic in Services; DB in Repositories
+- **Dependency injection**: typed and testable providers
+- **Separation of concerns**: DTOs, services, repositories, and controllers kept separate
 
-### 8. DTOs y validación
-- Uso de `class-validator` y `class-transformer` en DTOs.  
-- Validadores concretos (`@IsEmail()`, `@IsString()`, `@IsInt()`).  
-- Pipes globales o por ruta para validación.  
-- Errores de validación → 400.
+### 8. DTOs and validation
+- Using `class-validator` and `class-transformer` in DTOs.
+- Specific validators (`@IsEmail()`, `@IsString()`, `@IsInt()`).
+- Global or route-specific pipes for validation.
+- Validation errors → 400.
 
-### 9. MANEJO DE VALIDACIONES CRITICAS
-- Manejo y control en solicitudes de APIs externas
-- Respuestas breves y claras en casos de error o success
-- uso de
-    ```ts
-        try{}
-        catch{}
-    ```   
-- Errores de validación → 403, 500. etc.
+### 9. HANDLING CRITICAL VALIDATIONS
+- Handling and control in external API requests
+- Short and clear responses in case of error or success
+- use of
+```ts
+try{}
+catch{}
+```
+- Validation errors → 403, 500, etc.
 
-### 10. TypeORM y persistencia
-- **No concatenar** queries; usar QueryBuilder o parámetros.  
-- Uso de transacciones (QueryRunner) para operaciones multi-step.  
-- Migrations versionadas; evitar `synchronize: true` en producción.  
-- Configurar pool y max connections para Railway/MySQL.  
-- Repositorios y abstracción para facilitar testing.
+### 10. TypeORM and persistence
+- **Don't concatenate** queries; use QueryBuilder or parameters.
+- Use transactions (QueryRunner) for multi-step operations.
+- Versioned migrations; avoid `synchronize: true` in production.
+- Set up pool and max connections for Railway/MySQL.
+- Repositories and abstraction to make testing easier.
 
-### 11. Seguridad y manejo de errores
-- No loggear datos sensibles.  
-- Exception Filters para respuestas consistentes.  
-- Guards y Roles para autorización.  
-- Rate limiting en endpoints críticos.  
-- Sanitización de inputs y protección contra inyección.
+### 11. Security and Error Handling
+- Don't log sensitive data.
+- Exception filters for consistent responses.
+- Guards and roles for authorization.
+- Rate limiting on critical endpoints.
+- Input sanitization and protection against injection.
 
 ### 12. Testing y CI (JEST)
 - Tests unitarios para services críticos.  
@@ -82,72 +82,71 @@ El agente debe devolver **solo Markdown** con esta estructura:
 - Lint y Prettier configurados.  
 - Documentar comandos para ejecutar tests localmente.
 
-### 13. Observabilidad y operaciones
-- Logs estructurados y niveles.  
-- Health endpoints y readiness checks.  
-- Migrations y backups documentados.
+### 13. Observability and Operations
+- Structured logs and levels.
+- Health endpoints and readiness checks.
+- Documented migrations and backups.
 
-### 14. TIPADO Y CALIDAD
-- Evitar `any`; usar interfaces y generics.  
-- Tipado esticto siempre:
-    - Ejemplo:
+### 14. TYPING AND QUALITY
+- Avoid `any`; use interfaces and generics.
+- Always strict typing:
+- Example:
     ```ts
         let edad:number;
         const cadena:string;
         const obj:ExampleCustomType={}
+    ```
 
 
-## 15. COMANDO DE EJECUCION E INSTALACION
-### Ejemplo:
+### 15. EXECUTION AND INSTALLATION COMMAND. Example:
 ```bash
    pnpm install
    pnpm dev
 ```
 
-## 16. Refactor y patrones recomendados
-- Aplicar patrón Repository → Service → Controller.  
-- Extraer lógica compleja a servicios reutilizables y funciones pequeñas.  
-- Usar DTOs y mappers para transformar entidades.  
-- Ejemplo de QueryBuilder seguro:
+### 16. Refactor and Recommended Patterns
+- Apply Repository → Service → Controller pattern.
+- Extract complex logic into reusable services and small functions.
+- Use DTOs and mappers to transform entities.
+- Example of a safe QueryBuilder:
 ```ts
 return this.userRepository.createQueryBuilder('u')
   .where('u.email = :email', { email })
   .getOne();
 ```
 
-### 17. REGLAS DE BUENAS PRACTICAS DE TYPESCRIPT
-- Crear Types cuando lo que se busca crear como contrato no lo logre una interface nativa. 
-- No crear ni repetir mismas firmas redundantemente, si es posible usar los `Omit` o similares, para tomar mismos tipos de propiedades. 
-- Aprovechar Genericos para mejor flexibilidad.
-- Ordenar y modularizar las firmas/contratos de manera cohernete y optima
-- uso de `enum` para evitar errores de escritura en valores con strings sueltos y muy repetidos en el proyecto.
+### 17. TYPESCRIPT BEST PRACTICES RULES
+- Create Types when what you want to create as a contract can't be achieved with a native interface.
+- Don't create or repeat the same signatures redundantly; if possible, use `Omit` or similar to reuse property types.
+- Take advantage of Generics for better flexibility.
+- Organize and modularize signatures/contracts in a coherent and optimal way.
+- Use `enum` to avoid typos in values that are loose strings and very repetitive in the project.
 
 
-### 18. Analisis de versiones de dependencias
-- **OBLIGACION:** siempre que se quiera instalar dependencias, hacer un `search` profundo de X dependencia y siempre usar la ultima version.
-- Analizar funciones, objetos deprecados para evitar usarlos.
-- Evitar siempre que sea posible instalaciones locales o globales usando `pnmp dlx`
+### 18. Analysis of dependency versions
+- **OBLIGATION:** whenever you want to install dependencies, do a deep `search` of X dependency and always use the latest version.
+- Analyze functions, deprecated objects to avoid using them.
+- Always avoid, if possible, local or global installations using `pnpm dlx`
 
-### 19. REGLAS GENERALES
-- Estrictamente prohibido entrar a las variables de entorno (todo archivo que empieze con '.env.*' o '.env' )
-- PROHIBIDO usar  comandos con 'npm' o 'npx'
-- ejecutar `node --version` y verificar actualizacion
-- ejecutar `nest --version` para saber su version y si ya esta instalada antes de intentar reinstalar.
-- examinar la version de `node` con el framework y demas técnologias utiizados en proyecto, para evitar incompatibilidades
-- **Evitar reinventar la rueda:** Antes de crear una logica compleja que una dependencia puede resolver, explicar motivo de sugerencia.
-- Luego de instalar, hacer el `pnpm audit`
-- **Revision de dependencias:** reveer en dependencias y sus sub-dependencias que en sus `package.json` en los `scripts` no existan comandos sospechosos como `curl`, `wdget` o similares que sea comando por via red, si es asi, evitar la ejecucion y documentarmelo.
-- Siempre usar los comandos de instalacion del framwork de manera "estandar" y "recomendada" seguún la documentación. por ejemplo: ejecutar comando de `nest create new .`, etc, para crear proyecto con carpetas mas configuraciones preestablecidas por defecto en nest.
-- Evitar codigo spagetti.
-- Asegurar optimizacion y escalabilidad.
-- aplica comentarios en codigo en primera persona forma humana, que expliquen logica en:
-    - funciones 
-    - variables 
-    - array
-    - operaciones/logica compleja dentro de cualquier bloque
-    - objetos 
-de froma clara y breve que permita entender a el resto.
-- Nombrar variables, objetos, funciones etc siempre en ingles pero manteniendo coherencia ejemplo:
-    - Una funcion es un verbo, debe ser coherente con lo que hace
-    - Una interfaz define una estructura de datos, debe ser coherente y debe iniciar con "I" ej: `IDataUser`
-    - Un type define un tipo de dato especifico, debe ser coherente y debe iniciar con "T" ej: `TDataUser`
+### 19. GENERAL RULES
+- Strictly forbidden to access environment variables (any file starting with '.env.*' or '.env')
+- FORBIDDEN to use commands with 'npm' or 'npx'
+- Run `node --version` and check for updates
+- Run `nest --version` to know its version and if it's already installed before trying to reinstall
+- Check the `node` version with the framework and other technologies used in the project to avoid incompatibilities
+- **Avoid reinventing the wheel:** Before creating complex logic that a dependency can handle, explain the reason for the suggestion
+- After installing, run `pnpm audit`
+- **Dependency review:** check dependencies and their sub-dependencies to make sure that in their `package.json` under `scripts` there aren’t any suspicious commands like `curl`, `wget`, or similar network commands; if there are, avoid running them and document it for me.
+- Always use the framework’s installation commands in the “standard” and “recommended” way according to the documentation. For example: run the command `nest create new .` to create a project with folders and pre-configured default settings in Nest.
+- Avoid spaghetti code.
+- Ensure optimization and scalability.
+- Apply comments in the code in first person, human form, explaining the logic in:
+- functions
+- variables
+- arrays
+- operations/complex logic within any block
+- objects
+- Name variables, objects, functions, etc., always in English but keep consistency. Example:
+- A function is a verb, it should be consistent with what it does.
+- An interface defines a data structure, it should be consistent and start with "I", e.g., `IDataUser`.
+- A type defines a specific data type, it should be consistent and start with "T", e.g., `TDataUser`.
